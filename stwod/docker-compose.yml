@@ -1,0 +1,14 @@
+version: '2'
+services:
+  couchdb:
+    image: couchdb
+    volumes:
+      - ./etc:/usr/local/etc/couchdb/local.d
+      - ./lib:/usr/local/var/lib/couchdb
+    ports:
+      - "5984:5984"
+    network_mode: host
+#  stwod:
+#    image: dapc11/stwod
+#    network_mode: host
+#    command: stwod.py -s 10
