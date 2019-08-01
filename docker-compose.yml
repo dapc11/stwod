@@ -8,7 +8,6 @@ services:
     ports:
       - "5984:5984"
     network_mode: host
-#  stwod:
-#    image: dapc11/stwod
-#    network_mode: host
-#    command: stwod.py -s 10
+  stwod:
+    image: dapc11/stwod
+    network_mode: host

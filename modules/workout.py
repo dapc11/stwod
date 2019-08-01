@@ -4,6 +4,7 @@ import os
 import sys
 import couchdb
 import random
+import json
 
 class Workout():
     def __init__(self, nr_of_exercises):
@@ -22,7 +23,16 @@ class Workout():
         exercises = []
         for id in ids:
             exercises.append(self.db[id])
-        return exercises
+
+        self.cleanup_data(exercises)
+        return json.dumps(exercises)
+
+    def cleanup_data(self, to_be_cleaned):
+        blacklist = ('_id', '_rev', 'type')
+        for key in blacklist:
+            for entry in to_be_cleaned:
+                if key in entry:
+                    del entry[key]
 
     def get_reps(self, min_set, max_set, min_rep, max_rep, num):
         res = []

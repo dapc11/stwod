@@ -9,5 +9,6 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 COPY . /app
 
 ENV PYTHONPATH /app:/app/modules
+ENV FLASK_APP=stwod_server.py
 
-ENTRYPOINT ["python"]
+ENTRYPOINT ["flask", "run"]
