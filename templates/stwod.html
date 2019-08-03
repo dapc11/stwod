@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>STWOD</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
+<body>
+    <h1>STWOD - your workout of the day!</h1>
+    {% for entry in data %}
+    <h3> {{ entry.name }} </h3>
+    <div> {{ entry.description }} </div>
+    {% endfor %}
+</body>
+
+</html>
