@@ -29,6 +29,7 @@ div.exercise {
 }
 
 button.generate {
+    opacity: .7;
     background-color: #cfcfc4;
     padding: 10px;
     text-align: center;
