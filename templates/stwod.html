@@ -2,16 +2,22 @@
 <html>
 
 <head>
-    <title>STWOD</title>
+    <title>Stwod</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
+<header>
+    <h1>STWOD - your workout of the day!</h1>
+</header>
+
+<button class="generate" value="Generate workout" onClick="window.location.href=window.location.href">Generate workout</button>
 
 <body>
-    <h1>STWOD - your workout of the day!</h1>
-    {% for entry in data %}
-    <h3> {{ entry.name }} </h3>
-    <div> {{ entry.description }} </div>
-    {% endfor %}
+    <div class="exercises">
+        {% for entry in data %}
+        <h3> {{ entry.name }} </h3>
+        <div class="exercise"> {{ entry.description }} </div>
+        {% endfor %}
+    </div>
 </body>
 
 </html>
