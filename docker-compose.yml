@@ -1,13 +1,16 @@
 version: '2'
 services:
   couchdb:
-    image: couchdb
+    image: couchdb:3.1.0
     volumes:
       - ./etc:/usr/local/etc/couchdb/local.d
       - ./lib:/usr/local/var/lib/couchdb
     ports:
       - "5984:5984"
     network_mode: host
+    environment:
+      - 'COUCHDB_USER=admin'
+      - 'COUCHDB_PASSWORD=password'
   stwod:
-    image: dapc11/stwod
+    image: dapc11/stwod:6c24c04
     network_mode: host

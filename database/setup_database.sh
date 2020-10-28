@@ -1,13 +1,13 @@
 #!/bin/bash -e
 
 # create databases
-curl -X PUT http://127.0.0.1:5984/strength
-curl -X PUT http://127.0.0.1:5984/mobillity
+curl -u admin:password -X PUT http://127.0.0.1:5984/strength
+curl -u admin:password -X PUT http://127.0.0.1:5984/mobillity
 
 # populate databases
 cd mobillity
-for exercise in $(ls); do cat ${exercise} | POST -sS "http://127.0.0.1:5984/mobillity" -c "application/json"; done
+for exercise in $(ls); do cat ${exercise} | curl  -H "Content-Type: application/json" -u admin:password -X POST --data-binary @- "http://127.0.0.1:5984/mobillity"; done
 cd ../strength
-for exercise in $(ls); do cat ${exercise} | POST -sS "http://127.0.0.1:5984/strength" -c "application/json"; done
+for exercise in $(ls); do cat ${exercise} | curl  -H "Content-Type: application/json" -u admin:password -X POST --data-binary @- "http://127.0.0.1:5984/strength"; done
 
 exit 0

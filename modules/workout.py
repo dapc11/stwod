@@ -9,9 +9,16 @@ import json
 
 class Workout():
     def __init__(self, nr_of_exercises):
-        self.couchserver = couchdb.Server("http://127.0.0.1:5984/")
-        self.db = None
-        self.nr_of_exercises = nr_of_exercises
+        try:
+            user = "admin"
+            password = "password"
+            self.couchserver = couchdb.Server("http://%s:%s@127.0.0.1:5984/" % (user, password))
+            for dbname in self.couchserver:
+                print(dbname)
+            self.db = None
+            self.nr_of_exercises = nr_of_exercises
+        except Exception as e:
+            print(e)
 
     def get_exercises(self):
         ids = []
