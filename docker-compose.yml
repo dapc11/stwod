@@ -12,5 +12,6 @@ services:
       - 'COUCHDB_USER=admin'
       - 'COUCHDB_PASSWORD=password'
   stwod:
-    image: dapc11/stwod:6c24c04
+    build:
+        context: .
     network_mode: host
