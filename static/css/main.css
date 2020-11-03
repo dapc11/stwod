@@ -13,8 +13,11 @@ html {
 
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #444;
     overflow: hidden;
+}
+
+html, body, input, textarea, select, button {
+    background-color: transparent;
 }
 
 header {
