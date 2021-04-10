@@ -11,24 +11,44 @@ import os
 class Workout():
 
     def __init__(self):
-        """
+        '''
         Init method for setting up database connections, retry if database has not started yet.
-        """
+        '''
         while True:
             try:
-                user = "admin"
-                password = "password"
-                self.couchserver = couchdb.Server(f"http://{user}:{password}@127.0.0.1:5984/")
+                user = 'admin'
+                password = 'password'
+                self.couchserver = couchdb.Server(f'http://{user}:{password}@127.0.0.1:5984/')
             except ConnectionError:
                 time.sleep(2)
             except Exception as e:
-                print("Failed setting up database connection")
+                print('Failed setting up database connection')
                 print(e)
                 break
             break
+        time.sleep(10)
         self.init_users()
-        self.db = None
-        print("Done setting up database connection")
+        self.strength = self.init('strength')
+        self.mobillity = self.init('mobillity')
+        print('Done setting up database connection')
+
+    def init(self, db_type):
+        try:
+            self.couchserver.create(db_type)
+        except couchdb.PreconditionFailed:
+            print(f'{db_type} database already exists')
+        db = self.couchserver[db_type]
+        url = f'database/{db_type}'
+        for file in os.listdir(url):
+            try:
+                with open(f'{url}/{file}', 'r') as f:
+                    exercise = json.load(f)
+                    md5hash = hashlib.md5(json.dumps(exercise).encode('utf-8')).hexdigest()
+                    exercise['_id'] = md5hash
+                    db.save(exercise)
+            except couchdb.ResourceConflict:
+                continue
+        return db
 
     def init_users(self):
         try:
@@ -37,9 +57,9 @@ class Workout():
             print('_users already exists')
 
 
-    def get_exercises(self, nr_of_exercises):
+    def get_exercises(self, db, nr_of_exercises):
         ids = []
-        for docid in self.db.view('_all_docs'):
+        for docid in db.view('_all_docs'):
             ids.append(docid['id'])
 
         if len(ids) > nr_of_exercises:
@@ -47,7 +67,7 @@ class Workout():
 
         exercises = []
         for id in ids:
-            exercises.append(self.db[id])
+            exercises.append(db[id])
 
         self.cleanup_data(exercises)
         return exercises
@@ -67,21 +87,9 @@ class Workout():
         return res
 
     def export_as_json(self, target):
-        print("Exporting as json to: {0}".format(target))
+        print(f'Exporting as json to: {target}')
         raise NotImplementedError
 
     def export_as_csv(self, target):
-        print("Exporting as csv to: {0}".format(target))
+        print(f'Exporting as csv to: {target}')
         raise NotImplementedError
-
-    def init_database(self, url: str):
-        for file in os.listdir(url):
-            try:
-                with open(f'{url}/{file}', 'r') as f:
-                    exercise = json.load(f)
-                    md5hash = hashlib.md5(json.dumps(exercise).encode('utf-8')).hexdigest()
-                    exercise['_id'] = md5hash
-                    self.db.save(exercise)
-            except couchdb.ResourceConflict:
-                continue
-

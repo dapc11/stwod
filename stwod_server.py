@@ -1,16 +1,12 @@
 #!/usr/bin/env python -Btt
 
 from flask import Flask, render_template
-from modules.strength import Strength
-from modules.mobillity import Mobillity
-
-workout = None
+from modules.workout import Workout
 
 def create_app():
-    # create and configure the app
     app = Flask(__name__)
-    strength = Strength()
-    mobillity = Mobillity()
+    wod = Workout()
+
 
     @app.route('/')
     def index():
@@ -18,16 +14,16 @@ def create_app():
 
     @app.route('/strength/<int:nr_of_exercises>')
     def get_strength(nr_of_exercises):
-        return render_template('stwod.html', data=strength.get_exercises(nr_of_exercises))
+        return render_template('stwod.html', data=wod.get_exercises(wod.strength, nr_of_exercises))
 
     @app.route('/mobillity/<int:nr_of_exercises>')
     def get_mobility(nr_of_exercises):
-        return render_template('stwod.html', data=mobillity.get_exercises(nr_of_exercises))
+        return render_template('stwod.html', data=wod.get_exercises(wod.mobillity, nr_of_exercises))
 
     @app.route('/mix')
     def get_mixed():
-        m = mobillity.get_exercises(3)
-        s = strength.get_exercises(3)
+        m = wod.get_exercises(wod.mobillity, 3)
+        s = wod.get_exercises(wod.strength, 3)
         return render_template('stwod.html', data=m + s)
     return app
 
