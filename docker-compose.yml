@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   couchdb:
     image: couchdb:3.1.0
@@ -9,9 +9,11 @@ services:
       - "5984:5984"
     network_mode: host
     environment:
-      - 'COUCHDB_USER=admin'
-      - 'COUCHDB_PASSWORD=password'
+      - "COUCHDB_USER=admin"
+      - "COUCHDB_PASSWORD=password"
   stwod:
     build:
-        context: .
+      context: .
+    depends_on:
+      - couchdb
     network_mode: host
