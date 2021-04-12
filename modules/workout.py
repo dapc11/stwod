@@ -7,8 +7,10 @@ import time
 import hashlib
 import os
 
+from cassandra.cluster import Cluster
 
 class Workout():
+    KEYSPACE = "testkeyspace"
 
     def __init__(self):
         '''
@@ -31,6 +33,28 @@ class Workout():
         self.strength = self.init('strength')
         self.mobillity = self.init('mobillity')
         print('Done setting up database connection')
+        self.cluster = Cluster()
+        self.session = self.cluster.connect()
+        self.init_cassandra()
+
+
+    def init_cassandra(self):
+        self.session.execute("""
+        CREATE KEYSPACE IF NOT EXISTS %s
+        WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': '2' }
+        """ % self.KEYSPACE)
+
+        self.session.set_keyspace(self.KEYSPACE)
+
+        self.session.execute("""
+           CREATE TABLE IF NOT EXISTS mytable (
+               thekey text,
+               col1 text,
+               col2 text,
+               PRIMARY KEY (thekey, col1)
+           )
+           """)
+
 
     def init(self, db_type):
         try:
