@@ -11,7 +11,5 @@ Open up `http://127.0.0.1:5000/mix` in your browser and go hard or go home!
 ## TODO
 
 - Secure app
-- No credentials in plain text
+- Add reps x sets boundaries
 - Start using TLS
-- Hardening python
-- Hardening couchdb

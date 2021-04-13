@@ -14,16 +14,16 @@ def create_app():
 
     @app.route('/strength/<int:nr_of_exercises>')
     def get_strength(nr_of_exercises):
-        return render_template('stwod.html', data=wod.get_exercises(wod.strength, nr_of_exercises))
+        return render_template('stwod.html', data=wod.get_exercises(Workout.STRENGTH, nr_of_exercises))
 
     @app.route('/mobillity/<int:nr_of_exercises>')
     def get_mobility(nr_of_exercises):
-        return render_template('stwod.html', data=wod.get_exercises(wod.mobillity, nr_of_exercises))
+        return render_template('stwod.html', data=wod.get_exercises(Workout.MOBILLITY, nr_of_exercises))
 
     @app.route('/mix')
     def get_mixed():
-        m = wod.get_exercises(wod.mobillity, 3)
-        s = wod.get_exercises(wod.strength, 3)
+        m = wod.get_exercises(Workout.MOBILLITY, 3)
+        s = wod.get_exercises(Workout.STRENGTH, 3)
         return render_template('stwod.html', data=m + s)
     return app
 

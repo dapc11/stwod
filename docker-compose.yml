@@ -1,7 +1,7 @@
 version: "2.1"
 services:
   cassandra:
-    image: cassandra:latest
+    image: cassandra:3.11.10
     network_mode: host
     healthcheck:
       test: ["CMD-SHELL", "[ $$(nodetool statusgossip) = running ]"]
@@ -9,29 +9,10 @@ services:
       timeout: 10s
       retries: 5
 
-  couchdb:
-    image: couchdb:3.1.0
-    volumes:
-      - ./etc:/usr/local/etc/couchdb/local.d
-      - ./lib:/usr/local/var/lib/couchdb
-    ports:
-      - "5984:5984"
-    network_mode: host
-    environment:
-      - "COUCHDB_USER=admin"
-      - "COUCHDB_PASSWORD=password"
-    healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost:5984/_up"]
-        interval: 30s
-        timeout: 10s
-        retries: 5
-
   stwod:
     build:
       context: .
     depends_on:
       cassandra:
-        condition: service_healthy
-      couchdb:
         condition: service_healthy
     network_mode: host
