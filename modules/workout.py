@@ -55,7 +55,6 @@ class Workout():
 
         return random.sample(list(exercise_result), nr_of_exercises)
 
-
     def get_reps(self, min_set, max_set, min_rep, max_rep, num):
         res = []
         for i in range(num):
